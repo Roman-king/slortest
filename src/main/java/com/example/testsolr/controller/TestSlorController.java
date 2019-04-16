@@ -1,5 +1,6 @@
 package com.example.testsolr.controller;
 
+import com.example.testsolr.slorDao.UserBean;
 import com.example.testsolr.slordto.Assetstorage;
 import com.example.testsolr.slordto.SolrAssetstorageUtils;
 import org.apache.commons.beanutils.BeanUtils;
@@ -12,6 +13,7 @@ import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.SolrParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.solr.core.SolrOperations;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +29,8 @@ import java.util.List;
 public class TestSlorController {
   @Autowired
   private SolrClient client;
+  @Autowired
+  private SolrOperations solrTemplate;
     @RequestMapping("getMessage")
     public SolrDocumentList getMessage() throws Exception{
         SolrQuery params = new SolrQuery();
@@ -62,6 +66,23 @@ public class TestSlorController {
      return  "删除成功";
 
  }
+ @RequestMapping("addslor")
+public String addslor(){
+        UserBean userBean = new UserBean();
+     userBean.setId(21);
+     userBean.setAge("27");
+     userBean.setName("大ss小写");
+     UserBean userBean1 = new UserBean();
+     userBean1.setId(22);
+     userBean1.setAge("29");
+     userBean1.setName("ii写");
+     List list = new ArrayList();
+     list.add(userBean);
+     list.add(userBean1);
+    solrTemplate.saveBeans("collection1",list);
+     solrTemplate.commit("collection1");
+    return  "成功";
+}
  //根据id查询数据信息  然后修改当前信息Sl
  @RequestMapping("findid")
  public String findById() throws  Exception{
