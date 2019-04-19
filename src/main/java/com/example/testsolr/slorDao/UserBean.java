@@ -2,12 +2,16 @@ package com.example.testsolr.slorDao;
 
 import org.apache.solr.client.solrj.beans.Field;
 
+import java.util.Date;
+
 public class UserBean {
     private int id;
     @Field("name")
-    private  String name;
+    private  String Name;
     @Field("age")
-    private String age;
+    private String Age;
+    @Field("birday")
+    private Date Birday;
 
     public int getId() {
         return id;
@@ -18,18 +22,26 @@ public class UserBean {
     }
 
     public String getName() {
-        return name;
+        return Name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        Name = name;
     }
 
     public String getAge() {
-        return age;
+        return Age;
     }
 
     public void setAge(String age) {
-        this.age = age;
+        Age = age;
+    }
+
+    public Date getBirday() {
+        return Birday;
+    }
+
+    public void setBirday(Date birday) {
+        Birday = birday;
     }
 }

@@ -4,7 +4,7 @@ import org.apache.solr.common.SolrInputDocument;
 
 public class SolrAssetstorageUtils {
 
-    public static SolrInputDocument getSolrInputDocument(Assetstorage assetstorage){
+    public static SolrInputDocument getSolrInputDocument(AssetstorageSlor assetstorage){
         SolrInputDocument solrInputFields = new SolrInputDocument();
         solrInputFields.setField("assetsid",assetstorage.getAssetsid());
         solrInputFields.setField("assetscoding",assetstorage.getAssetscoding());

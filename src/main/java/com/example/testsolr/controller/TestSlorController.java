@@ -1,7 +1,7 @@
 package com.example.testsolr.controller;
 
+import com.example.testsolr.slorDao.AnalysisCore;
 import com.example.testsolr.slorDao.UserBean;
-import com.example.testsolr.slordto.Assetstorage;
 import com.example.testsolr.slordto.SolrAssetstorageUtils;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.solr.client.solrj.SolrClient;
@@ -11,17 +11,21 @@ import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
-import org.apache.solr.common.params.SolrParams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.solr.core.SolrOperations;
-import org.springframework.data.solr.core.SolrTemplate;
+import org.springframework.data.solr.core.query.Criteria;
+import org.springframework.data.solr.core.query.Query;
+import org.springframework.data.solr.core.query.SimpleQuery;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 @RestController
@@ -72,6 +76,7 @@ public String addslor(){
      userBean.setId(21);
      userBean.setAge("27");
      userBean.setName("大ss小写");
+     userBean.setBirday(new Date());
      UserBean userBean1 = new UserBean();
      userBean1.setId(22);
      userBean1.setAge("29");
@@ -84,24 +89,24 @@ public String addslor(){
     return  "成功";
 }
  //根据id查询数据信息  然后修改当前信息Sl
- @RequestMapping("findid")
- public String findById() throws  Exception{
-     // UpdateResponse updateResponse = client.deleteById("collection1","2");
-     //根据id查询 封装成实体类
-     SolrQuery params = new SolrQuery();
-     params.set("q","assetsid:2f5f76dd-c944-4784-8813-99624b35ca70");
-     QueryResponse assetmaintenance_core = client.query("assetstorage_core",params);
-     SolrDocumentList results = assetmaintenance_core.getResults();
-     SolrDocument document = results.get(0);
-     //将SolrDocument转成实体类
-     Assetstorage assetstorage = (Assetstorage) toBean(document, Assetstorage.class);
-     //向真
-     assetstorage.setUsename("向真");
-     client.add("assetstorage_core", SolrAssetstorageUtils.getSolrInputDocument(assetstorage));
-     client.commit("assetstorage_core");
-     return  "删除成功";
-
- }
+// @RequestMapping("findid")
+// public String findById() throws  Exception{
+//     // UpdateResponse updateResponse = client.deleteById("collection1","2");
+//     //根据id查询 封装成实体类
+//     SolrQuery params = new SolrQuery();
+//     params.set("q","assetsid:2f5f76dd-c944-4784-8813-99624b35ca70");
+//     QueryResponse assetmaintenance_core = client.query("assetstorage_core",params);
+//     SolrDocumentList results = assetmaintenance_core.getResults();
+//     SolrDocument document = results.get(0);
+//     //将SolrDocument转成实体类
+//     Assetstorage assetstorage = (Assetstorage) toBean(document, Assetstorage.class);
+//     //向真
+//     assetstorage.setUsename("向真");
+//     client.add("assetstorage_core", SolrAssetstorageUtils.getSolrInputDocument(assetstorage));
+//     client.commit("assetstorage_core");
+//     return  "删除成功";
+//
+// }
     public   Object toBean( SolrDocument record , Class clazz){
 
         Object o = null;
@@ -136,5 +141,18 @@ public String addslor(){
             list.add(toBean(record,clazz));
         }
         return list;
+    }
+
+    @RequestMapping("testget")
+    public String testslorbean(){
+        Query query=new SimpleQuery();
+        Criteria criteria=new Criteria("orderid").contains("LY190417013232409");
+        query.addCriteria(criteria);
+        Page<AnalysisCore> query1 = solrTemplate.queryForPage("analysis_core", query, AnalysisCore.class);
+       // solrTemplate.queryForPage()
+        List<AnalysisCore> content = query1.getContent();
+
+
+        return  "成功";
     }
 }

@@ -2,7 +2,7 @@ package com.example.testsolr.slordto;
 
 import java.io.Serializable;
 
-public class Assetstorage implements Serializable {
+public class AssetstorageSlor implements Serializable {
     private String assetsid;
     private String assetscoding;
     private String assetqrcode;
@@ -60,7 +60,7 @@ public class Assetstorage implements Serializable {
     private String usetoid;
     private String usernameid;
 
-    public Assetstorage() {
+    public AssetstorageSlor() {
     }
 
     public String getAssetsid() {
